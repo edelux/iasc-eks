@@ -1,0 +1,6 @@
+## j2 -e AWS_S3_BACKEND templates/backend.tf.j2 -o backend.conf
+region         = "{{ AWS_REGION }}"
+bucket         = "{{ AWS_S3_BACKEND }}"
+key            = "{{ AWS_BACKEND_KEY_EKS }}"
+dynamodb_table = "tfstate-locking"
+encrypt        = true
