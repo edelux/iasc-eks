@@ -17,14 +17,20 @@ variable "environment" { #REQUIRED
 
 ## EKS
 variable "admin_allowed_ips" {
-  type    = string
-  default = ""
+  type    = list(string)
+  default = []
 }
 
 variable "cluster_version" {
   description = "Cluster version"
   type        = string
   default     = "1.32"
+}
+
+variable "cluster_addons" {
+  description = "Addons and versions list"
+  type        = map(string)
+  default     = {}
 }
 
 variable "max_nodes" {
