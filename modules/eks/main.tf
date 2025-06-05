@@ -2,9 +2,9 @@
 module "eks" {
   source = "terraform-aws-modules/eks/aws"
 
-  cluster_name           = "${terraform.workspace}-eks"
+  cluster_name           = "${terraform.workspace}-${var.cluster_name}-${var.project}-eks"
   cluster_version        = var.cluster_version
-  cluster_upgrade_policy = "STANDARD"
+  cluster_upgrade_policy = var.upgrade_policy
 
   vpc_id                   = var.vpc_id
   subnet_ids               = var.private_subnet_ids
@@ -12,10 +12,16 @@ module "eks" {
 
   enable_irsa                              = true
   cluster_endpoint_public_access           = true
-  cluster_endpoint_public_access_cidrs     = length(var.admin_allowed_ips) > 0 ? split(",", join(",", var.admin_allowed_ips)) : []
+  cluster_endpoint_public_access_cidrs     = length(var.ip_access_allow) > 0 ? split(",", join(",", var.ip_access_allow)) : []
   enable_cluster_creator_admin_permissions = true
 
-  cluster_addons = var.cluster_addons
+  cluster_addons = {
+    for addon in var.cluster_addons : addon.name => {
+      preserve          = false
+      addon_version     = addon.version
+      resolve_conflicts = "OVERWRITE"
+    }
+  }
 
   eks_managed_node_groups = {
     arm64 = {
@@ -32,6 +38,7 @@ module "eks" {
   }
 
   tags = {
+    Project     = var.project
     Terraform   = "true"
     Environment = terraform.workspace
   }

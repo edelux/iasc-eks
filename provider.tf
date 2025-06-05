@@ -11,5 +11,5 @@ terraform {
 }
 
 provider "aws" {
-  region = data.terraform_remote_state.iasc-network.outputs.region
+  region = data.terraform_remote_state.infra.outputs.region
 }
