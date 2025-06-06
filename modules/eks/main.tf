@@ -39,7 +39,7 @@ module "eks" {
         resolve_conflicts = "OVERWRITE"
         timeouts          = { create = "30m", delete = "15m" }
         } : {
-        preserve          = false
+        preserve          = true
         addon_version     = addon.version
         resolve_conflicts = "OVERWRITE"
         timeouts          = null

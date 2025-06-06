@@ -1,14 +1,14 @@
 
-## j2 templates/network.tpl -o data-networking.tf
+## j2 templates/data-networking.tf.j2 >>variables.tf
 
-data "terraform_remote_state" "iasc-network" {
+data "terraform_remote_state" "infra" {
   backend = "s3"
 
   config = {
-    region         = "{{ AWS_REGION }}"
-    bucket         = "{{ AWS_S3_BACKEND }}"
-    key            = "env:/${terraform.workspace}/{{ AWS_BACKEND_KEY_NETWORKING }}"
-    dynamodb_table = "tfstate-locking"
-    encrypt        = true
+    bucket       = "{{ AWS_S3_BACKEND }}"
+    key          = "env:/${terraform.workspace}/{{ AWS_S3_BACKEND_KEY }}"
+    region       = "{{ AWS_REGION }}"
+    encrypt      = true
+    use_lockfile = true
   }
 }
