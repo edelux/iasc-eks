@@ -1,20 +1,4 @@
 
-## Infra
-data "terraform_remote_state" "infra" {
-  backend = "s3"
-
-  config = {
-    bucket       = "github-eenee2ma9ohxeiquua2ingaipaz6eerahsugheesaen9asa3fee1koor"
-    key          = "env:/${terraform.workspace}/infra/terraform.tfstate"
-    region       = "us-east-1"
-    encrypt      = true
-    use_lockfile = true
-  }
-}
-
-
-
-
 variable "environment" { #REQUIRED
   description = "Environment Name (dev, qa, stg, prod)"
   type        = string
@@ -28,6 +12,22 @@ variable "environment" { #REQUIRED
   validation {
     condition     = terraform.workspace == var.environment
     error_message = "Invalid workspace: The active workspace '${terraform.workspace}' does not match the specified environment '${var.environment}'."
+  }
+}
+
+
+
+
+## Infra
+data "terraform_remote_state" "infra" {
+  backend = "s3"
+
+  config = {
+    bucket       = "github-eenee2ma9ohxeiquua2ingaipaz6eerahsugheesaen9asa3fee1koor"
+    key          = "env:/${terraform.workspace}/infra/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
   }
 }
 
